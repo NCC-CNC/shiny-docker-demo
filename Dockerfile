@@ -31,25 +31,29 @@ RUN install2.r --error \
     cli
 
 # set up data directory
-## create directory
-RUN mkdir /data
+## create directory and
 ## set read-only permissions (i.e. r--r--r--)
-RUN chmod -R 444 /data
+RUN mkdir /data && \
+  chmod -R 444 /data
 
 # set up log file directory
-## create directory
-RUN mkdir /logs
-# set read/write-only permissions (i.e. -rw-rw-rw-)
-RUN chmod -R 666 /logs
+## create directory and set
+RUN mkdir /logs && \
+  touch /logs/log.txt && \
+  chmod 777 /logs/log.txt
 
 # set user
 USER shiny
 
 # install app
 RUN mkdir /home/shiny/app
-COPY app/global.R /home/shiny/app/global.R
-COPY app/server.R /home/shiny/app/server.R
-COPY app/ui.R /home/shiny/app/ui.R
+COPY --chown=shiny:shiny app/global.R /home/shiny/app/global.R
+COPY --chown=shiny:shiny app/server.R /home/shiny/app/server.R
+COPY --chown=shiny:shiny app/ui.R /home/shiny/app/ui.R
+COPY --chown=shiny:shiny run.sh /home/shiny/app/run.sh
+
+# set executable permissions
+RUN chmod +x /home/shiny/app/run.sh
 
 # expose port
 EXPOSE 3838
@@ -57,5 +61,7 @@ EXPOSE 3838
 # set working directory
 WORKDIR /home/shiny/app
 
+RUN ls -la /logs
+
 # run app
-CMD ["/usr/local/bin/Rscript", "-e", "options(shiny.port=3838,shiny.host= '0.0.0.0');shiny::runApp('.')", ">&", "/logs/log.txt"]
+CMD "/home/shiny/app/run.sh"
