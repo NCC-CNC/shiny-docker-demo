@@ -1,4 +1,5 @@
 # Print information for example logging
+message("")
 message(cli::rule())
 message("Initializing application")
 message(Sys.time())

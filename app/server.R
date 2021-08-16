@@ -2,6 +2,7 @@
 shinyServer(function(input, output) {
 
   # Print information for example logging
+  message("")
   message(cli::rule())
   message("Starting new instance")
   message(Sys.time())
