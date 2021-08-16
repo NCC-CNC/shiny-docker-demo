@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: naturecons/shiny-docker-demo
+    ports:
+      - "3838:3838"
+    volumes:
+      - "./data:/data"
+      - "./logs:/logs"
