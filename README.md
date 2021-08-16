@@ -10,7 +10,15 @@ This repository contains an demo for running a [Shiny Web application](https://s
 To run the demo, please install the [Docker Engine](https://www.docker.com/) ([see here for instructions](https://docs.docker.com/get-docker/)). After completing this step, you can install the application from the [DockerHub repository](https://hub.docker.com/repository/docker/naturecons/shiny-docker-demo). Specifically, please use the following system command:
 
 ```{bash, eval = FALSE}
-docker run -dp 3838:3838 --name shiny-docker-demo -it naturecons/shiny-docker-demo:latest
+docker run \
+  --detach \
+  --tty \
+  --interactive \
+  --publish 3838:3838 \
+  --volume "$(pwd)"/data:/data \
+  --volume "$(pwd)"/logs:/logs \
+  --name shiny-docker-demo \
+  naturecons/shiny-docker-demo:latest
 ```
 
 You can then view the application by opening the following link in your web browser: http://localhost:3838. After you have finished using the application, you can terminate it using the following system command. **Note that if you don't terminate the application once you are finished using it, then it will continue running in the background.**
