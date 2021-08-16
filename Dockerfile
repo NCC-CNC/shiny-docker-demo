@@ -30,21 +30,6 @@ RUN install2.r --error \
     leafpop \
     cli
 
-# set up data directory
-## create directory and
-## set read-only permissions (i.e. r--r--r--)
-RUN mkdir /data && \
-  chmod -R 444 /data
-
-# set up log file directory
-## create directory and set
-RUN mkdir /logs && \
-  touch /logs/log.txt && \
-  chmod 777 /logs/log.txt
-
-# set user
-USER shiny
-
 # install app
 RUN mkdir /home/shiny/app
 COPY --chown=shiny:shiny app/global.R /home/shiny/app/global.R
@@ -60,8 +45,6 @@ EXPOSE 3838
 
 # set working directory
 WORKDIR /home/shiny/app
-
-RUN ls -la /logs
 
 # run app
 CMD "/home/shiny/app/run.sh"
